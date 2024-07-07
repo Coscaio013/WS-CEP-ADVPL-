@@ -12,7 +12,6 @@ Static Function fInCep()
 
 	Local aPergs   := {}
 	Local nCep := 0
-	Space(TamSX3(A1_CEP))
 
 	aAdd(aPergs, {1, "CEP" ,nCep,PesqPict("SA1", "A1_CEP"),"ValCep()", "",".T.", TamSX3(A1_CEP), .T.})
 
@@ -50,20 +49,19 @@ static Function RestCep(nCep)
 
 	FWJsonDeserialize(cJson,@oJson)
 	If !AttIsMemberOf(oJson,"ERRO")
-
-		SA1->A1_CEP 	:= oJson['cep']
-		SA1->A1_END 	:= oJson['logradouro']
-		SA1->A1_COMPLEM := oJson['complemento']
-		SA1->A1_BAIRRO  := oJson['bairro']
-		SA1->A1_MUN  	:= oJson['localidade']
-		SA1->A1_IBGE	:= oJson['ibge']
-		SA1->A1_DDD		:= oJson['ddd']
-
+		RecLock('SA1', .F.)
+			SA1->A1_CEP 	:= oJson['cep']
+			SA1->A1_END 	:= oJson['logradouro']
+			SA1->A1_COMPLEM := oJson['complemento']
+			SA1->A1_BAIRRO  := oJson['bairro']
+			SA1->A1_MUN  	:= oJson['localidade']
+			SA1->A1_IBGE	:= oJson['ibge']
+			SA1->A1_DDD		:= oJson['ddd']
+		SA1->(MsUnlock())
 	Else
 		alert("Dados do CEP informado nao encontrados.")
-		Return
+		Return .F.
 	EndIf
 
-Return
-
+Return .T.
 

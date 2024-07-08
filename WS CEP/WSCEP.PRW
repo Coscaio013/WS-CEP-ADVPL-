@@ -13,7 +13,7 @@ Static Function fInCep()
 	Local aPergs   := {}
 	Local cCep := Space(TamSX3("A1_CEP")[1])
 
-	aAdd( aPergs ,{1,"CEP",cCep , PesqPict("SA1","A1_CEP")   ,'.T.',     ,'.T.',TamSX3("A1_CEP")[1],.F.}) 
+	aAdd( aPergs ,{1,"CEP",cCep , PesqPict("SA1","A1_CEP")   ,'U_ValCep()',     ,'.T.',TamSX3("A1_CEP")[1],.T.}) 
 
 	If ParamBox(aPergs, "Informe o cep")
 		If RestCep(MV_PAR01)
@@ -22,7 +22,17 @@ Static Function fInCep()
 	EndIf
 
 Return Nil
- 
+
+User Function ValCep()
+
+Local lRet := .T.
+
+	If len(ALLTRIM(&(ReadVar()))) < 8 .AND. !VAZIO()
+		lRet:= .F.
+	EndIf
+
+Return lRet
+
 static Function RestCep(cCep)
 
 	Local cUrl			:= "http://viacep.com.br/ws/"+ALLTRIM(cCep)+"/json/"
